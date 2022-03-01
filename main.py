@@ -28,7 +28,8 @@ class KeyValPair(object):
 class SpreadSheet(KeyValPair):
     def __init__(self, name, url):
         super().__init__(name, url)
-        [self.name, self.url] = [self.key, self.value]
+        self.name = name
+        self.url = url
         self.filename = self.get_filename()
         self.sheetdir = self.create_sheetdir()
 
