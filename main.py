@@ -1,6 +1,7 @@
 import urllib.request
 import os
 from os.path import exists
+from datetime import date
 
 EXT = ['.csv', '.xlsx', '.json']
 DEST = './sheets/'
@@ -47,10 +48,22 @@ class SheetHandler(object):
         return sheetdir
 
     def download(self):
-        print(f'Beginning download...       {self.name}')
-        urllib.request.urlretrieve(
-            self.url, filename=self.sheetdir + self.filename)
-        print('Download complete.')
+        '''
+        If there is a sheet for today, don't download it
+
+            today_file_dir = sheets/self.name/str(today) +_+ self.filename
+        '''
+
+        today = date.today()
+        today_file_dir = self.sheetdir + str(today) + '_' + self.filename
+
+        if os.path.isfile(today_file_dir):
+            print(f'ALREADY EXISTS :            {str(today)}_{self.filename}')
+
+        else:
+            print(f'Beginning download...       {self.name}')
+            urllib.request.urlretrieve(self.url, filename=today_file)
+            print('Download complete.')
 
 
 if __name__ == '__main__':
