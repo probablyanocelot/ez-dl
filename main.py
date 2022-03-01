@@ -38,7 +38,7 @@ class SpreadSheet(KeyValPair):
         """
         self.name + appropriate extension
         """
-        for xtn in EXT:
+        for xtn in self.__class__.EXT:
             # more modular approach may be needed
             if xtn in self.url:
                 filename = self.name + xtn
@@ -48,10 +48,10 @@ class SpreadSheet(KeyValPair):
         """
         Create /sheets & /sheets/self.name/ if not exists
         """
-        sheetdir = DEST + self.name + '/'
+        sheetdir = self.__class__.DEST + self.name + '/'
 
-        if not os.path.exists(DEST):
-            os.mkdir(DEST)
+        if not os.path.exists(self.__class__.DEST):
+            os.mkdir(self.__class__.DEST)
         if not os.path.exists(sheetdir):
             os.mkdir(sheetdir)
         return sheetdir
