@@ -40,11 +40,12 @@ class SheetHandler(object):
         """
         Create /sheets & /sheets/self.name/ if not exists
         """
+        sheetdir = DEST + self.name + '/'
+
         if not os.path.exists(DEST):
             os.mkdir(DEST)
-        if not os.path.exists(DEST + self.name):
-            os.mkdir(DEST + self.name + '/')
-        sheetdir = DEST + self.name + '/'
+        if not os.path.exists(sheetdir):
+            os.mkdir(sheetdir)
         return sheetdir
 
     def download(self):
