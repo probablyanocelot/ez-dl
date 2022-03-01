@@ -19,13 +19,18 @@ URLS = {
 }
 
 
-class SheetHandler(object):
+class KeyValPair(object):
+    def __init__(self, key, value):
+        self.key = key
+        self.value = value
+
+
+class SpreadSheet(KeyValPair):
     def __init__(self, name, url):
-        self.name = name
-        self.url = url
+        super().__init__(name, url)
+        [self.name, self.url] = [self.key, self.value]
         self.filename = self.get_filename()
         self.sheetdir = self.create_sheetdir()
-        self.download()
 
     def get_filename(self):
         """
@@ -49,6 +54,12 @@ class SheetHandler(object):
             os.mkdir(sheetdir)
         return sheetdir
 
+
+class Downloader(SpreadSheet):
+    def __init__(self, name, url):
+        super().__init__(name, url)
+        self.download()
+
     def download(self):
         '''
         If there is a sheet for today, don't download it
@@ -68,8 +79,21 @@ class SheetHandler(object):
             print('Download complete.')
 
 
+class BatchDownload(Downloader):
+    def __init__(self, dataset):
+        # super().__init__(key, value)
+        self.dataset = dataset
+        self.download()
+
+    def download(self):
+        for name in self.dataset:
+            url = self.dataset[name]
+            Downloader(name, url)
+        print('All sheets downloaded.')
+
+
 if __name__ == '__main__':
-    for name in URLS:
-        url = URLS[name]
-        SheetHandler(name, url)
-    print('All sheets downloaded.')
+    batch_download = BatchDownload(URLS)
+    # for name in URLS:
+    #     url = URLS[name]
+    #     Downloader(name, url)
