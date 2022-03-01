@@ -13,9 +13,9 @@ URLS = {
     "PowerBall": "https://data.ny.gov/api/views/d6yy-54nr/rows.csv?accessType=DOWNLOAD&sorting=true",
     "LotteryNy": "https://data.ny.gov/api/views/6nbc-h7bj/rows.csv?accessType=DOWNLOAD&sorting=true",
     "MegaMillions": "https://data.ny.gov/api/views/5xaw-6ayf/rows.csv?accessType=DOWNLOAD&sorting=true",
-    "QuickDraw": "https://data.ny.gov/api/views/7sqk-ycpk/rows.csv?accessType=DOWNLOAD&sorting=true",
     "Pick10": "https://data.ny.gov/api/views/bycu-cw7c/rows.csv?accessType=DOWNLOAD&sorting=true",
     "SweetMillion": "https://data.ny.gov/api/views/xjtd-9p3n/rows.csv?accessType=DOWNLOAD&sorting=true",
+    "QuickDraw": "https://data.ny.gov/api/views/7sqk-ycpk/rows.csv?accessType=DOWNLOAD&sorting=true",
 }
 
 
@@ -62,7 +62,7 @@ class SheetHandler(object):
 
         else:
             print(f'Beginning download...       {self.name}')
-            urllib.request.urlretrieve(self.url, filename=today_file)
+            urllib.request.urlretrieve(self.url, filename=today_file_dir)
             print('Download complete.')
 
 
