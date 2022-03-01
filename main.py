@@ -3,8 +3,6 @@ import os
 from os.path import exists
 from datetime import date
 
-EXT = ['.csv', '.xlsx', '.json']
-DEST = './sheets/'
 
 URLS = {
     "Take5": "https://data.ny.gov/api/views/dg63-4siq/rows.csv?accessType=DOWNLOAD&sorting=true",
@@ -26,6 +24,9 @@ class KeyValPair(object):
 
 
 class SpreadSheet(KeyValPair):
+    EXT = ['.csv', '.xlsx', '.json']
+    DEST = './sheets/'
+
     def __init__(self, name, url):
         super().__init__(name, url)
         self.name = name
