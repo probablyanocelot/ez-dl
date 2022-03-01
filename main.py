@@ -32,7 +32,8 @@ class SheetHandler(object):
         self.name + appropriate extension
         """
         for xtn in EXT:
-            if xtn in URLS[self.name]:
+            # more modular approach may be needed
+            if xtn in self.url:
                 filename = self.name + xtn
                 return filename
 
