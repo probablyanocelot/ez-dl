@@ -16,6 +16,8 @@ URLS = {
     "QuickDraw": "https://data.ny.gov/api/views/7sqk-ycpk/rows.csv?accessType=DOWNLOAD&sorting=true",
 }
 
+DEST = './data/'
+
 
 class KeyValPair(object):
     def __init__(self, key, value):
@@ -25,7 +27,6 @@ class KeyValPair(object):
 
 class TargetFile(KeyValPair):
     EXT = ['.csv', '.xlsx', '.json']
-    DEST = './data/'
 
     """
         TargetFile('desired filename', 'download url'),
@@ -37,7 +38,7 @@ class TargetFile(KeyValPair):
         self.name = name
         self.url = url
         self.filename = self.get_filename()
-        self.filedir = self.make_dirs()
+        self.filedir = DEST + self.name + '/'
 
     def get_filename(self):
         """
@@ -53,25 +54,25 @@ class TargetFile(KeyValPair):
             else:
                 print("NEED TO USE ALT METHOD OF FINDING FILETYPE")
 
-    def make_dirs(self):
-        """
-        Create /sheets & /sheets/self.name/ if not exists
-        """
-        filedir = self.__class__.DEST + self.name + '/'
-
-        if not os.path.exists(self.__class__.DEST):
-            os.mkdir(self.__class__.DEST)
-        if not os.path.exists(filedir):
-            os.mkdir(filedir)
-        return filedir
-
 
 # Split into two classes;
 # Downloader & (Scheduler?)
 class Downloader(TargetFile):
+
     def __init__(self, name, url):
         super().__init__(name, url)
+        self.make_dirs()
         self.download()
+
+    def make_dirs(self):
+        """
+        Create /sheets & /sheets/self.name/ if not exists
+        """
+
+        if not os.path.exists(DEST):
+            os.mkdir(DEST)
+        if not os.path.exists(self.filedir):
+            os.mkdir(self.filedir)
 
     def download(self):
         '''
