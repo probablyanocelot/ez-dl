@@ -25,7 +25,7 @@ class KeyValPair(object):
 
 class TargetFile(KeyValPair):
     EXT = ['.csv', '.xlsx', '.json']
-    DEST = './sheets/'
+    DEST = './data/'
 
     def __init__(self, name, url):
         super().__init__(name, url)
