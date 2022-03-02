@@ -27,6 +27,11 @@ class TargetFile(KeyValPair):
     EXT = ['.csv', '.xlsx', '.json']
     DEST = './data/'
 
+    """
+        TargetFile('desired filename', 'download url'),
+            - makes directories for file 
+    """
+
     def __init__(self, name, url):
         super().__init__(name, url)
         self.name = name
@@ -36,6 +41,8 @@ class TargetFile(KeyValPair):
 
     def get_filename(self):
         """
+                # NEED TO USE ALT METHOD OF FINDING FILETYPE
+
         self.name + appropriate extension
         """
         for xtn in self.__class__.EXT:
@@ -59,6 +66,8 @@ class TargetFile(KeyValPair):
         return filedir
 
 
+# Split into two classes;
+# Downloader & (Scheduler?)
 class Downloader(TargetFile):
     def __init__(self, name, url):
         super().__init__(name, url)
@@ -66,7 +75,7 @@ class Downloader(TargetFile):
 
     def download(self):
         '''
-        If there is a sheet for today, don't download it
+        If there is a file for today, don't download it
 
             today_file_dir = sheets/self.name/str(today) +_+ self.filename
         '''
