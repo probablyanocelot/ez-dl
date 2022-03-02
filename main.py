@@ -32,7 +32,7 @@ class TargetFile(KeyValPair):
         self.name = name
         self.url = url
         self.filename = self.get_filename()
-        self.sheetdir = self.create_sheetdir()
+        self.filedir = self.make_dirs()
 
     def get_filename(self):
         """
@@ -43,18 +43,20 @@ class TargetFile(KeyValPair):
             if xtn in self.url:
                 filename = self.name + xtn
                 return filename
+            else:
+                print("NEED TO USE ALT METHOD OF FINDING FILETYPE")
 
-    def create_sheetdir(self):
+    def make_dirs(self):
         """
         Create /sheets & /sheets/self.name/ if not exists
         """
-        sheetdir = self.__class__.DEST + self.name + '/'
+        filedir = self.__class__.DEST + self.name + '/'
 
         if not os.path.exists(self.__class__.DEST):
             os.mkdir(self.__class__.DEST)
-        if not os.path.exists(sheetdir):
-            os.mkdir(sheetdir)
-        return sheetdir
+        if not os.path.exists(filedir):
+            os.mkdir(filedir)
+        return filedir
 
 
 class Downloader(TargetFile):
@@ -70,7 +72,7 @@ class Downloader(TargetFile):
         '''
 
         today = date.today()
-        today_file_dir = self.sheetdir + str(today) + '_' + self.filename
+        today_file_dir = self.filedir + str(today) + '_' + self.filename
 
         if os.path.isfile(today_file_dir):
             print(f'ALREADY EXISTS :            {str(today)}_{self.filename}')
