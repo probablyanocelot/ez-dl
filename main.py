@@ -23,7 +23,7 @@ class KeyValPair(object):
         self.value = value
 
 
-class SpreadSheet(KeyValPair):
+class TargetFile(KeyValPair):
     EXT = ['.csv', '.xlsx', '.json']
     DEST = './sheets/'
 
@@ -57,7 +57,7 @@ class SpreadSheet(KeyValPair):
         return sheetdir
 
 
-class Downloader(SpreadSheet):
+class Downloader(TargetFile):
     def __init__(self, name, url):
         super().__init__(name, url)
         self.download()
