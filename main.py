@@ -2,6 +2,8 @@ import urllib.request
 import os
 from os.path import exists
 from datetime import date
+from urllib.parse import urlparse
+from os.path import splitext
 
 
 URLS = {
@@ -37,26 +39,19 @@ class TargetFile(KeyValPair):
         super().__init__(name, url)
         self.name = name
         self.url = url
-        self.filename = self.get_filename()
+        self.xtn = self.get_ext()
+        self.filename = self.name + self.xtn
         self.filedir = DEST + self.name + '/'
 
-    def get_filename(self):
-        """
-                # NEED TO USE ALT METHOD OF FINDING FILETYPE
-
-        self.name + appropriate extension
-        """
-        for xtn in self.__class__.EXT:
-            # more modular approach may be needed
-            if xtn in self.url:
-                filename = self.name + xtn
-                return filename
-            else:
-                print("NEED TO USE ALT METHOD OF FINDING FILETYPE")
+    def get_ext(self):
+        """Return the filename extension from url, or ''."""
+        parsed = urlparse(self.url)
+        root, ext = splitext(parsed.path)
+        return ext  # or ext[1:] if you don't want the leading '.'
 
 
-# Split into two classes;
-# Downloader & (Scheduler?)
+# Create scheduler?
+# Force overwrite option?
 class Downloader(TargetFile):
 
     def __init__(self, name, url):
