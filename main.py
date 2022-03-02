@@ -2,9 +2,9 @@ import urllib.request
 import os
 from os.path import exists
 from datetime import date
+from urllib.parse import urlparse
+from os.path import splitext
 
-EXT = ['.csv', '.xlsx', '.json']
-DEST = './sheets/'
 
 URLS = {
     "Take5": "https://data.ny.gov/api/views/dg63-4siq/rows.csv?accessType=DOWNLOAD&sorting=true",
@@ -18,46 +18,65 @@ URLS = {
     "QuickDraw": "https://data.ny.gov/api/views/7sqk-ycpk/rows.csv?accessType=DOWNLOAD&sorting=true",
 }
 
+DEST = './data/'
 
-class SheetHandler(object):
+
+class KeyValPair(object):
+    def __init__(self, key, value):
+        self.key = key
+        self.value = value
+
+
+class TargetFile(KeyValPair):
+
+    """
+        TargetFile('desired filename', 'download url'),
+            - makes directories for file 
+    """
+
     def __init__(self, name, url):
+        super().__init__(name, url)
         self.name = name
         self.url = url
-        self.filename = self.get_filename()
-        self.sheetdir = self.create_sheetdir()
+        self.xtn = self.get_ext()
+        self.filename = self.name + self.xtn
+        self.filedir = DEST + self.name + '/'
+
+    def get_ext(self):
+        """Return the filename extension from url, or ''."""
+        parsed = urlparse(self.url)
+        root, ext = splitext(parsed.path)
+        return ext  # or ext[1:] if you don't want the leading '.'
+
+
+# Create scheduler?
+# Force overwrite option?
+class Downloader(TargetFile):
+
+    def __init__(self, name, url):
+        super().__init__(name, url)
+        self.make_dirs()
         self.download()
 
-    def get_filename(self):
-        """
-        self.name + appropriate extension
-        """
-        for xtn in EXT:
-            # more modular approach may be needed
-            if xtn in self.url:
-                filename = self.name + xtn
-                return filename
-
-    def create_sheetdir(self):
+    def make_dirs(self):
         """
         Create /sheets & /sheets/self.name/ if not exists
         """
-        sheetdir = DEST + self.name + '/'
 
         if not os.path.exists(DEST):
             os.mkdir(DEST)
-        if not os.path.exists(sheetdir):
-            os.mkdir(sheetdir)
-        return sheetdir
+        if not os.path.exists(self.filedir):
+            os.mkdir(self.filedir)
 
     def download(self):
         '''
-        If there is a sheet for today, don't download it
+        If there is a file for today, don't download it
 
             today_file_dir = sheets/self.name/str(today) +_+ self.filename
         '''
 
         today = date.today()
-        today_file_dir = self.sheetdir + str(today) + '_' + self.filename
+        today_file_dir = self.filedir + str(today) + '_' + self.filename
 
         if os.path.isfile(today_file_dir):
             print(f'ALREADY EXISTS :            {str(today)}_{self.filename}')
@@ -68,8 +87,27 @@ class SheetHandler(object):
             print('Download complete.')
 
 
+class BatchDownload(Downloader):
+    def __init__(self, dataset):
+        # super().__init__(key, value)
+        self.dataset = dataset
+        self.download()
+
+    def download(self):
+        for name in self.dataset:
+            url = self.dataset[name]
+            Downloader(name, url)
+        print('All sheets downloaded.')
+
+
 if __name__ == '__main__':
-    for name in URLS:
-        url = URLS[name]
-        SheetHandler(name, url)
-    print('All sheets downloaded.')
+    """Uncomment to test BatchDownload"""
+    # batch_download = BatchDownload(URLS)
+
+    """Uncomment to test Downloader"""
+    # for name in URLS:
+    #     url = URLS[name]
+    #     Downloader(name, url)
+
+    """Example of flexibility"""
+    Downloader('Test', 'https://www.google.com')
