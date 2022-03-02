@@ -28,7 +28,6 @@ class KeyValPair(object):
 
 
 class TargetFile(KeyValPair):
-    EXT = ['.csv', '.xlsx', '.json']
 
     """
         TargetFile('desired filename', 'download url'),
@@ -102,7 +101,13 @@ class BatchDownload(Downloader):
 
 
 if __name__ == '__main__':
-    batch_download = BatchDownload(URLS)
+    """Uncomment to test BatchDownload"""
+    # batch_download = BatchDownload(URLS)
+
+    """Uncomment to test Downloader"""
     # for name in URLS:
     #     url = URLS[name]
     #     Downloader(name, url)
+
+    """Example of flexibility"""
+    Downloader('Test', 'https://www.google.com')
