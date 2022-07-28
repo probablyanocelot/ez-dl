@@ -60,7 +60,7 @@ class Downloader(TargetFile):
 
     def make_dirs(self):
         """
-        Create /sheets & /sheets/self.name/ if not exists
+        Create /data & /data/self.name/ if not exists
         """
 
         if not os.path.exists(DEST):
@@ -72,7 +72,7 @@ class Downloader(TargetFile):
         '''
         If there is a file for today, don't download it
 
-            today_file_dir = sheets/self.name/str(today) +_+ self.filename
+            today_file_dir = data/self.name/str(today) +_+ self.filename
         '''
 
         today = date.today()
@@ -97,7 +97,7 @@ class BatchDownload(Downloader):
         for name in self.dataset:
             url = self.dataset[name]
             Downloader(name, url)
-        print('All sheets downloaded.')
+        print('All files downloaded.')
 
 
 if __name__ == '__main__':
