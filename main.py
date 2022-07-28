@@ -109,5 +109,5 @@ if __name__ == '__main__':
     #     url = URLS[name]
     #     Downloader(name, url)
 
-    """Example of flexibility"""
+    """EXAMPLE"""
     Downloader('Test', 'https://www.google.com')
